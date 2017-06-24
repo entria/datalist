@@ -1,0 +1,115 @@
+# Represents AdminUser
+type AdminUser implements Node {
+  # The ID of an object
+  id: ID!
+
+  # Admin Complete Name
+  name: String
+  email: String
+  active: Boolean
+}
+
+input AdminUserAddInput {
+  name: String!
+  password: String
+  email: String!
+  active: Boolean
+  roles: String
+  clientMutationId: String
+}
+
+type AdminUserAddPayload {
+  adminUserEdge: AdminUserEdge
+  error: String
+  clientMutationId: String
+}
+
+# A connection to a list of items.
+type AdminUserConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [AdminUserEdge]
+}
+
+# An edge in a connection.
+type AdminUserEdge {
+  # The item at the end of the edge
+  node: AdminUser
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input AdminUserEditInput {
+  id: ID!
+  name: String
+  password: String
+  email: String
+  active: Boolean
+  clientMutationId: String
+}
+
+type AdminUserEditPayload {
+  adminUser: AdminUser
+  error: String
+  clientMutationId: String
+}
+
+input AdminUserLoginInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type AdminUserLoginPayload {
+  token: String
+  error: String
+  clientMutationId: String
+}
+
+type Mutation {
+  AdminUserLogin(input: AdminUserLoginInput!): AdminUserLoginPayload
+  AdminUserAdd(input: AdminUserAddInput!): AdminUserAddPayload
+  AdminUserEdit(input: AdminUserEditInput!): AdminUserEditPayload
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+# The root of all... queries
+type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+
+  # Fetches objects given their IDs
+  nodes(
+    # The IDs of objects
+    ids: [ID!]!
+  ): [Node]!
+  me: AdminUser
+  adminUser(id: ID!): AdminUser
+  adminUsers(after: String, first: Int, before: String, last: Int): AdminUserConnection
+}
