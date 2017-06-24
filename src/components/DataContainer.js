@@ -71,4 +71,16 @@ class DataContainer extends Component {
   }
 }
 
+DataContainer.defaultProps = {
+  dataKey: null,
+  loading: false,
+  variables: {},
+};
+
+DataContainer.propTypes = {
+  dataKey: PropTypes.string,
+  loading: PropTypes.bool,
+  variables: PropTypes.object,
+};
+
 export default DataContainer;
