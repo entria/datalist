@@ -64,7 +64,7 @@
     "build": "babel src -d lib",
     "lint": "eslint --ext js src",
     "lint:staged": "lint-staged",
-    "relay": "relay-compiler --src ./src --schema data/schema.graphql",
+    "relay": "relay-compiler --src ./storybook --schema data/schema.graphql",
     "relay:watch": "yarn relay -- --watch",
     "start": "start-storybook -p 6006 -c storybook",
     "demo:build": "build-storybook -c storybook",
