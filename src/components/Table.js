@@ -3,16 +3,23 @@ import PropTypes from 'prop-types';
 import Lodash from 'lodash';
 
 const Table = ({ columns, data, cellRender, loading }) => {
+  const generateKey = (column, index) => {
+    const property = column.property || 'noProperty';
+    return property + index.toString();
+  };
+
   const renderHeader = () =>
     <thead>
       <tr>
-        {columns.map(column => <th key={column.property} style={styles.th}>{column.label}</th>)}
+        {columns.map((column, index) =>
+          <th key={generateKey(column, index)} style={styles.th}>{column.label}</th>,
+        )}
       </tr>
     </thead>;
 
-  const renderRow = (row, index) =>
-    <tr key={index}>
-      {columns.map(column => {
+  const renderRow = (row, rowIndex) =>
+    <tr key={rowIndex}>
+      {columns.map((column, colIndex) => {
         let cell;
         if (column.render) {
           cell = column.render(row);
@@ -22,7 +29,7 @@ const Table = ({ columns, data, cellRender, loading }) => {
         }
 
         return (
-          <td key={column.property} style={styles.td}>
+          <td key={generateKey(column, colIndex)} style={styles.td}>
             {cell}
           </td>
         );
