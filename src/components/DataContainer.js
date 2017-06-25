@@ -45,7 +45,7 @@ class DataContainer extends Component {
     const { loading } = this.state;
 
     if (hasNextPage(this.props, dataKey) && !loading) {
-      this.handleLoadMore();
+      this.loadMore();
     }
   }
 
