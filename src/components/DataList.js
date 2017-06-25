@@ -10,9 +10,6 @@ const DataList = incomingProps => {
   const props = {
     ...incomingProps,
   };
-  if (!props.fragments) {
-    props.fragments = {};
-  }
   if (!props.variables.first) {
     props.variables.first = 20;
   }
@@ -42,6 +39,7 @@ const DataList = incomingProps => {
 };
 
 DataList.defaultProps = {
+  fragments: {},
   variables: {},
   cellRender: null,
 };
@@ -56,6 +54,7 @@ DataList.propTypes = {
       render: PropTypes.func,
     }),
   ).isRequired,
+  fragments: PropTypes.object,
   variables: PropTypes.object,
   cellRender: PropTypes.func,
 };
