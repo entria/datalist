@@ -6,12 +6,12 @@ import { identifyDataKey } from '../utils/relay';
 
 import DataContainer from './DataContainer';
 
-const DataList = incomingProps => {
-  const props = {
-    ...incomingProps,
+const DataList = props => {
+  const variables = {
+    ...props.variables,
   };
-  if (!props.variables.first) {
-    props.variables.first = 20;
+  if (!variables.first) {
+    variables.first = 20;
   }
 
   const DataListRefetchContainer = createRefetchContainer(
@@ -24,11 +24,11 @@ const DataList = incomingProps => {
     <QueryRenderer
       environment={props.environment}
       query={props.query}
-      variables={props.variables}
+      variables={variables}
       render={({ props: rendererProps }) =>
         <DataListRefetchContainer
           columns={props.columns}
-          variables={props.variables}
+          variables={variables}
           cellRender={props.cellRender}
           loading={rendererProps === null}
           dataKey={rendererProps ? identifyDataKey(rendererProps) : null}
