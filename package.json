@@ -1,6 +1,6 @@
 {
   "name": "@entria/datalist",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Turns your data into a table with Relay RefetchContainer",
   "keywords": [
     "react",
