@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { createRefetchContainer, QueryRenderer } from 'react-relay';
-import { identifyDataKey } from '../utils/relay';
 
 import DataContainer from './DataContainer';
 
@@ -31,7 +30,6 @@ const DataList = props => {
           variables={variables}
           cellRender={props.cellRender}
           loading={rendererProps === null}
-          dataKey={rendererProps ? identifyDataKey(rendererProps) : null}
           {...rendererProps}
         />}
     />

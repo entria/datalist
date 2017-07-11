@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import { hasNextPage, createDataArray } from '../utils/relay';
+import { hasNextPage, createDataArray } from '@entria/relay-utils';
 
 import InfiniteScroll from './InfiniteScroll';
 import Table from './Table';
@@ -41,18 +40,18 @@ class DataContainer extends Component {
   }
 
   handleScroll() {
-    const { dataKey } = this.props;
     const { loading } = this.state;
 
-    if (hasNextPage(this.props, dataKey) && !loading) {
+    if (hasNextPage(this.props) && !loading) {
       this.loadMore();
     }
   }
 
   render() {
-    const { columns, cellRender, dataKey } = this.props;
+    const { columns, cellRender } = this.props;
     const { loading } = this.state;
-    const data = createDataArray(this.props, dataKey);
+
+    const data = createDataArray(this.props);
 
     return (
       <InfiniteScroll onScroll={() => this.handleScroll()}>
@@ -63,7 +62,7 @@ class DataContainer extends Component {
             onClick={() => this.loadMore()}
             label={loading ? 'Carregando...' : 'Carregar mais'}
             disabled={loading}
-            visible={data.length > 0 && hasNextPage(this.props, dataKey)}
+            visible={data.length > 0 && hasNextPage(this.props)}
           />
         </div>
       </InfiniteScroll>
@@ -72,13 +71,11 @@ class DataContainer extends Component {
 }
 
 DataContainer.defaultProps = {
-  dataKey: null,
   loading: false,
   variables: {},
 };
 
 DataContainer.propTypes = {
-  dataKey: PropTypes.string,
   loading: PropTypes.bool,
   variables: PropTypes.object,
 };
