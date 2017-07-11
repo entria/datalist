@@ -21,7 +21,7 @@ const initialState: State = {
 export default function reducer(state: State = initialState, action: Action) {
   switch (action.type) {
     case SELECT: {
-      const { item, key } = action.paylod;
+      const { item, key } = action.payload;
 
       const selected = state.selected[key] || [];
       selected.push(item);
@@ -34,7 +34,7 @@ export default function reducer(state: State = initialState, action: Action) {
       return newState;
     }
     case UNSELECT: {
-      const { item, key } = action.paylod;
+      const { item, key } = action.payload;
 
       const newState = {
         ...state,

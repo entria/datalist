@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
-const Table = ({ columns, cellRender, checkboxes, data, loading }) => {
+import { connect } from 'react-redux';
+
+import { select, unselect } from '../ducks/Selected';
+
+const Table = ({ columns, cellRender, checkboxes, data, loading, actions, selected }) => {
+  console.log(selected);
+
   const generateKey = (column, index) => {
     const property = column.property || 'noProperty';
     return property + index.toString();
@@ -25,7 +31,16 @@ const Table = ({ columns, cellRender, checkboxes, data, loading }) => {
     <tr key={rowIndex}>
       {checkboxes.store &&
         <td style={styles.td}>
-          <checkboxes.component />
+          <checkboxes.component
+            onChange={event => {
+              const { checked } = event.target;
+              if (checked) {
+                actions.select(row);
+              } else {
+                actions.unselect(row);
+              }
+            }}
+          />
         </td>}
       {columns.map((column, colIndex) => {
         let cell;
@@ -111,4 +126,15 @@ Table.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default Table;
+const mapStateToProps = state => ({
+  selected: state.selected,
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+  actions: {
+    select: item => dispatch(select(item, props.checkboxes.store)),
+    unselect: item => dispatch(unselect(item, props.checkboxes.store)),
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

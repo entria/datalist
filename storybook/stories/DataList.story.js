@@ -156,7 +156,7 @@ stories.add('with checkboxes', () =>
       ],
       checkboxes: {
         store: 'planets',
-        component: () => <input type="checkbox" />
+        component: (props) => <input type="checkbox" {...props} />
       },
     }}
   />,
