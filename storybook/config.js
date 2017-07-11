@@ -1,4 +1,13 @@
-import { configure } from '@kadira/storybook';
+import React from 'react';
+import { addDecorator, configure } from '@kadira/storybook';
+import { Provider } from 'react-redux';
+import store from './store';
+
+addDecorator(story =>
+  <Provider store={store}>
+    {story()}
+  </Provider>,
+);
 
 const req = require.context('./stories', true, /\.story\.js$/);
 
