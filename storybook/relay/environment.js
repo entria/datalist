@@ -3,10 +3,12 @@
  */
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
+const GRAPHQL_URL = process.env.NODE_ENV === 'production' ? 'https://datalist.herokuapp.com/' : 'http://localhost:5000';
+
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise:
 function fetchQuery(operation, variables, cacheConfig) {
-  return fetch('http://localhost:5109/graphql', {
+  return fetch(GRAPHQL_URL, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

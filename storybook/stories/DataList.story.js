@@ -12,11 +12,11 @@ stories.add('default', () =>
     environment={Environment}
     query={graphql`
       query DataListQuery($first: Int!) {
-        adminUsers(first: $first) @connection(key: "DataList_adminUsers") {
+        allPeople(first: $first) @connection(key: "DataList_allPeople", filters: []) {
           edges {
             node {
               name
-              email
+              gender
             }
           }
           pageInfo {
@@ -32,8 +32,8 @@ stories.add('default', () =>
         property: 'name',
       },
       {
-        label: 'Email',
-        property: 'email',
+        label: 'Gender',
+        property: 'gender',
       },
     ]}
   />,
