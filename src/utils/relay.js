@@ -32,12 +32,17 @@ export function identifyDataKey(queryProps) {
     return null;
   }
 
-  const arrayKeys = [];
-  arrayKeys.push(Object.keys(queryProps)[0]);
+  const walkPropsKeys = props => {
+    const key = Object.keys(props)[0];
+    const arrayKeys = [key];
+    const newProps = props[key];
 
-  if (arrayKeys.indexOf('viewer') > -1) {
-    arrayKeys.push(Object.keys(queryProps.viewer)[0]);
-  }
+    if (!newProps.edges) {
+      return arrayKeys.concat(walkPropsKeys(newProps));
+    }
 
-  return arrayKeys.join('.');
+    return arrayKeys;
+  };
+
+  return walkPropsKeys(queryProps).join('.');
 }

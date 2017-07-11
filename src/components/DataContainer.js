@@ -45,7 +45,7 @@ class DataContainer extends Component {
     const { loading } = this.state;
 
     if (hasNextPage(this.props, dataKey) && !loading) {
-      this.handleLoadMore();
+      this.loadMore();
     }
   }
 
@@ -70,5 +70,17 @@ class DataContainer extends Component {
     );
   }
 }
+
+DataContainer.defaultProps = {
+  dataKey: null,
+  loading: false,
+  variables: {},
+};
+
+DataContainer.propTypes = {
+  dataKey: PropTypes.string,
+  loading: PropTypes.bool,
+  variables: PropTypes.object,
+};
 
 export default DataContainer;
