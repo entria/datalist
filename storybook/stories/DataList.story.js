@@ -11,7 +11,7 @@ stories.add('default', () =>
   <DataList
     environment={Environment}
     query={graphql`
-      query DataListQuery($first: Int!) {
+      query DataListPeopleQuery($first: Int!) {
         allPeople(first: $first) @connection(key: "DataList_allPeople", filters: []) {
           edges {
             node {
@@ -36,6 +36,48 @@ stories.add('default', () =>
           label: 'Gender',
           property: 'gender',
         },
+      ],
+    }}
+  />,
+);
+
+stories.add('with custom render function', () =>
+  <DataList
+    environment={Environment}
+    query={graphql`
+      query DataListFilmsQuery($first: Int!) {
+        allFilms(first: $first) @connection(key: "DataList_allFilms", filters: []) {
+          edges {
+            node {
+              title
+              director
+              releaseDate
+            }
+          }
+          pageInfo {
+            hasNextPage
+          }
+        }
+      }
+    `}
+    variables={{ first: 5 }}
+    table={{
+      columns: [
+        {
+          label: 'Title',
+          property: 'title',
+        },
+        {
+          label: 'Director',
+          property: 'director',
+        },
+        {
+          label: 'Year',
+          render: (film) => {
+            const releaseDate = new Date(film.releaseDate);
+            return releaseDate.getFullYear();
+          },
+        }
       ],
     }}
   />,
