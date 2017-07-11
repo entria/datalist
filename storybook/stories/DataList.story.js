@@ -77,8 +77,46 @@ stories.add('with custom render function', () =>
             const releaseDate = new Date(film.releaseDate);
             return releaseDate.getFullYear();
           },
-        }
+        },
       ],
+    }}
+  />,
+);
+
+stories.add('with checkboxes', () =>
+  <DataList
+    environment={Environment}
+    query={graphql`
+      query DataListPlanetssQuery($first: Int!) {
+        allPlanets(first: $first) @connection(key: "DataList_allPlanets", filters: []) {
+          edges {
+            node {
+              name
+              population
+            }
+          }
+          pageInfo {
+            hasNextPage
+          }
+        }
+      }
+    `}
+    variables={{ first: 5 }}
+    table={{
+      columns: [
+        {
+          label: 'Name',
+          property: 'name',
+        },
+        {
+          label: 'Population',
+          property: 'population',
+        },
+      ],
+      checkboxes: {
+        store: 'planets',
+        component: () => <input type="checkbox" />
+      },
     }}
   />,
 );

@@ -76,10 +76,7 @@ DataContainer.defaultProps = {
   table: {
     columns: [],
     cellRender: null,
-    checkboxes: {
-      enabled: false,
-      component: <input type="checkbox" />,
-    },
+    checkboxes: {},
   },
 };
 
@@ -95,7 +92,10 @@ DataContainer.propTypes = {
       }),
     ).isRequired,
     cellRender: PropTypes.func,
-    checkboxes: PropTypes.object,
+    checkboxes: PropTypes.shape({
+      store: PropTypes.string.isRequired,
+      component: PropTypes.any.isRequired,
+    }),
   }),
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
-const Table = ({ columns, data, cellRender, loading }) => {
+const Table = ({ columns, cellRender, checkboxes, data, loading }) => {
   const generateKey = (column, index) => {
     const property = column.property || 'noProperty';
     return property + index.toString();
@@ -11,6 +11,10 @@ const Table = ({ columns, data, cellRender, loading }) => {
   const renderHeader = () =>
     <thead>
       <tr>
+        {checkboxes.store &&
+          <th style={styles.th}>
+            <checkboxes.component />
+          </th>}
         {columns.map((column, index) =>
           <th key={generateKey(column, index)} style={styles.th}>{column.label}</th>,
         )}
@@ -19,6 +23,10 @@ const Table = ({ columns, data, cellRender, loading }) => {
 
   const renderRow = (row, rowIndex) =>
     <tr key={rowIndex}>
+      {checkboxes.store &&
+        <td style={styles.td}>
+          <checkboxes.component />
+        </td>}
       {columns.map((column, colIndex) => {
         let cell;
         if (column.render) {
@@ -80,9 +88,10 @@ const styles = {
 };
 
 Table.defaultProps = {
+  cellRender: null,
+  checkboxes: {},
   data: [],
   loading: false,
-  cellRender: null,
 };
 
 Table.propTypes = {
@@ -93,8 +102,12 @@ Table.propTypes = {
       render: PropTypes.func,
     }),
   ).isRequired,
-  data: PropTypes.array,
   cellRender: PropTypes.func,
+  checkboxes: PropTypes.shape({
+    store: PropTypes.string.isRequired,
+    component: PropTypes.any.isRequired,
+  }),
+  data: PropTypes.array,
   loading: PropTypes.bool,
 };
 

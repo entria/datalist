@@ -41,7 +41,7 @@ DataList.defaultProps = {
   table: {
     columns: [],
     cellRender: null,
-    checkboxes: null,
+    checkboxes: {},
   },
 };
 
@@ -59,7 +59,10 @@ DataList.propTypes = {
       }),
     ).isRequired,
     cellRender: PropTypes.func,
-    checkboxes: PropTypes.node,
+    checkboxes: PropTypes.shape({
+      store: PropTypes.string.isRequired,
+      component: PropTypes.any.isRequired,
+    }),
   }),
 };
 
