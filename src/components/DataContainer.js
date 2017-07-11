@@ -48,7 +48,7 @@ class DataContainer extends Component {
   }
 
   render() {
-    const { columns, cellRender } = this.props;
+    const { table } = this.props;
     const { loading } = this.state;
 
     const data = createDataArray(this.props);
@@ -56,7 +56,7 @@ class DataContainer extends Component {
     return (
       <InfiniteScroll onScroll={() => this.handleScroll()}>
         <div>
-          <Table columns={columns} cellRender={cellRender} data={data} loading={loading} />
+          <Table {...table} data={data} loading={loading} />
 
           <LoadMore
             onClick={() => this.loadMore()}
@@ -73,11 +73,30 @@ class DataContainer extends Component {
 DataContainer.defaultProps = {
   loading: false,
   variables: {},
+  table: {
+    columns: [],
+    cellRender: null,
+    checkboxes: {
+      enabled: false,
+      component: <input type="checkbox" />,
+    },
+  },
 };
 
 DataContainer.propTypes = {
   loading: PropTypes.bool,
   variables: PropTypes.object,
+  table: PropTypes.shape({
+    columns: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        property: PropTypes.string,
+        render: PropTypes.func,
+      }),
+    ).isRequired,
+    cellRender: PropTypes.func,
+    checkboxes: PropTypes.object,
+  }),
 };
 
 export default DataContainer;

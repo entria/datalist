@@ -26,15 +26,17 @@ stories.add('default', () =>
       }
     `}
     variables={{ first: 5 }}
-    columns={[
-      {
-        label: 'Name',
-        property: 'name',
-      },
-      {
-        label: 'Gender',
-        property: 'gender',
-      },
-    ]}
+    table={{
+      columns: [
+        {
+          label: 'Name',
+          property: 'name',
+        },
+        {
+          label: 'Gender',
+          property: 'gender',
+        },
+      ],
+    }}
   />,
 );

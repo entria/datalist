@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Lodash from 'lodash';
+import { get } from 'lodash';
 
 const Table = ({ columns, data, cellRender, loading }) => {
   const generateKey = (column, index) => {
@@ -24,7 +24,7 @@ const Table = ({ columns, data, cellRender, loading }) => {
         if (column.render) {
           cell = column.render(row);
         } else {
-          const value = Lodash.get(row, column.property);
+          const value = get(row, column.property);
           cell = cellRender ? cellRender(value, row) : value;
         }
 
@@ -82,7 +82,7 @@ const styles = {
 Table.defaultProps = {
   data: [],
   loading: false,
-  cellRender: () => {},
+  cellRender: null,
 };
 
 Table.propTypes = {

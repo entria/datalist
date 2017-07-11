@@ -26,10 +26,9 @@ const DataList = props => {
       variables={variables}
       render={({ props: rendererProps }) =>
         <DataListRefetchContainer
-          columns={props.columns}
           variables={variables}
-          cellRender={props.cellRender}
           loading={rendererProps === null}
+          table={props.table}
           {...rendererProps}
         />}
     />
@@ -39,22 +38,29 @@ const DataList = props => {
 DataList.defaultProps = {
   fragments: {},
   variables: {},
-  cellRender: null,
+  table: {
+    columns: [],
+    cellRender: null,
+    checkboxes: null,
+  },
 };
 
 DataList.propTypes = {
   environment: PropTypes.object.isRequired,
   query: PropTypes.func.isRequired,
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      property: PropTypes.string,
-      render: PropTypes.func,
-    }),
-  ).isRequired,
   fragments: PropTypes.object,
   variables: PropTypes.object,
-  cellRender: PropTypes.func,
+  table: PropTypes.shape({
+    columns: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        property: PropTypes.string,
+        render: PropTypes.func,
+      }),
+    ).isRequired,
+    cellRender: PropTypes.func,
+    checkboxes: PropTypes.node,
+  }),
 };
 
 export default DataList;
