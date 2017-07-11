@@ -132,6 +132,7 @@ stories.add('with checkboxes', () =>
         allPlanets(first: $first) @connection(key: "DataList_allPlanets", filters: []) {
           edges {
             node {
+              id
               name
               population
             }

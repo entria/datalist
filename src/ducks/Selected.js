@@ -63,7 +63,7 @@ export function select(item: any, key: string): Action {
 
 export function unselect(item: any, key: string): Action {
   return {
-    type: SELECT,
+    type: UNSELECT,
     payload: {
       item,
       key,
