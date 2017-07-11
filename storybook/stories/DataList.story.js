@@ -41,7 +41,7 @@ stories.add('default', () =>
   />,
 );
 
-stories.add('with custom render function', () =>
+stories.add('with table render()', () =>
   <DataList
     environment={Environment}
     query={graphql`
@@ -79,6 +79,47 @@ stories.add('with custom render function', () =>
           },
         },
       ],
+    }}
+  />,
+);
+
+stories.add('with table cellRender()', () =>
+  <DataList
+    environment={Environment}
+    query={graphql`
+      query DataListVehiclesQuery($first: Int!) {
+        allVehicles(first: $first) @connection(key: "DataList_allVehicles", filters: []) {
+          edges {
+            node {
+              name
+              model
+              vehicleClass
+            }
+          }
+          pageInfo {
+            hasNextPage
+          }
+        }
+      }
+    `}
+    variables={{ first: 5 }}
+    table={{
+      columns: [
+        {
+          label: 'Name',
+          property: 'name',
+        },
+        {
+          label: 'Model',
+          property: 'model',
+        },
+      ],
+      cellRender: (children, vehicles) => (
+        <div>
+          {children}
+          <small> ({vehicles.vehicleClass})</small>
+        </div>
+      )
     }}
   />,
 );
