@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
-const Table = ({ config, actions, data, loading }) => {
+const Table = ({ config, actions, data, loading, checked }) => {
   const { columns, cellRender } = config.table;
   const { checkboxes } = config;
 
@@ -17,6 +17,8 @@ const Table = ({ config, actions, data, loading }) => {
         {checkboxes.component &&
           <th style={styles.th}>
             <checkboxes.component
+              disabled={loading}
+              checked={data.length > 0 && checked.length >= data.length}
               onChange={event => {
                 const { checked } = event.target;
                 if (checked) {
