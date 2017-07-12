@@ -47,9 +47,12 @@ class DataContainer extends Component {
 
   fetchAll = (params = {}) => {
     const count = params.count || 100;
+    const data = createDataArray(this.props);
 
+    if (params.onFetch) {
+      params.onFetch(data);
+    }
     if (!hasNextPage(this.props) && params.onComplete) {
-      const data = createDataArray(this.props);
       return params.onComplete(data);
     }
 
@@ -61,6 +64,11 @@ class DataContainer extends Component {
 
   checkAll = () => {
     this.fetchAll({
+      onFetch: data => {
+        this.setState({
+          checked: data,
+        });
+      },
       onComplete: data => {
         this.setState({
           checked: data,
@@ -114,7 +122,7 @@ class DataContainer extends Component {
 
   prepareProps = () => {
     const { table, checkboxes } = this.props;
-    const { loading } = this.state;
+    const { loading, checked } = this.state;
     const data = createDataArray(this.props);
 
     return {
@@ -132,6 +140,7 @@ class DataContainer extends Component {
       loading,
       data,
       hasNextPage: data.length > 0 && hasNextPage(this.props),
+      checked,
     };
   };
 
