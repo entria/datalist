@@ -16,7 +16,16 @@ const Table = ({ config, actions, data, loading }) => {
       <tr>
         {checkboxes.component &&
           <th style={styles.th}>
-            <checkboxes.component />
+            <checkboxes.component
+              onChange={event => {
+                const { checked } = event.target;
+                if (checked) {
+                  actions.checkAll();
+                } else {
+                  actions.uncheckAll();
+                }
+              }}
+            />
           </th>}
         {columns.map((column, index) =>
           <th key={generateKey(column, index)} style={styles.th}>{column.label}</th>,
@@ -123,6 +132,8 @@ Table.propTypes = {
     }),
   }).isRequired,
   actions: PropTypes.shape({
+    checkAll: PropTypes.func,
+    uncheckAll: PropTypes.func,
     check: PropTypes.func,
     uncheck: PropTypes.func,
   }).isRequired,

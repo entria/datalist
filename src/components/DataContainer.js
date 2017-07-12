@@ -20,8 +20,9 @@ class DataContainer extends Component {
     });
   }
 
-  loadMore() {
-    const { variables, count } = this.state;
+  fetchMore = (params = {}) => {
+    const count = params.count || this.state.count;
+    const { variables } = this.state;
 
     const options = {
       ...variables,
@@ -37,16 +38,48 @@ class DataContainer extends Component {
       this.setState({
         loading: false,
       });
+
+      if (params.onComplete) {
+        params.onComplete();
+      }
     });
-  }
+  };
 
-  handleScroll() {
-    const { loading } = this.state;
+  fetchAll = (params = {}) => {
+    const count = params.count || 100;
 
-    if (hasNextPage(this.props) && !loading) {
-      this.loadMore();
+    if (!hasNextPage(this.props) && params.onComplete) {
+      const data = createDataArray(this.props);
+      return params.onComplete(data);
     }
-  }
+
+    this.fetchMore({
+      count,
+      onComplete: () => this.fetchAll(params),
+    });
+  };
+
+  checkAll = () => {
+    this.fetchAll({
+      onComplete: data => {
+        this.setState({
+          checked: data,
+        });
+
+        this.props.checkboxes.onChange(data);
+      },
+    });
+  };
+
+  uncheckAll = () => {
+    const checked = [];
+
+    this.setState({
+      checked,
+    });
+
+    this.props.checkboxes.onChange(checked);
+  };
 
   check = item => {
     const checked = [...this.state.checked, item];
@@ -68,7 +101,15 @@ class DataContainer extends Component {
     this.props.checkboxes.onChange(checked);
   };
 
-  prepareProps() {
+  handleScroll = () => {
+    const { loading } = this.state;
+
+    if (hasNextPage(this.props) && !loading) {
+      this.fetchMore();
+    }
+  };
+
+  prepareProps = () => {
     const { table, checkboxes } = this.props;
     const { loading } = this.state;
     const data = createDataArray(this.props);
@@ -79,6 +120,8 @@ class DataContainer extends Component {
         checkboxes,
       },
       actions: {
+        checkAll: () => this.checkAll(),
+        uncheckAll: () => this.uncheckAll(),
         check: item => this.check(item),
         uncheck: item => this.uncheck(item),
       },
@@ -86,7 +129,7 @@ class DataContainer extends Component {
       data,
       hasNextPage: data.length > 0 && hasNextPage(this.props),
     };
-  }
+  };
 
   render() {
     const preparedProps = this.prepareProps();
@@ -97,7 +140,7 @@ class DataContainer extends Component {
           <Table {...preparedProps} />
 
           <LoadMore
-            onClick={() => this.loadMore()}
+            onClick={() => this.fetchMore()}
             label={preparedProps.loading ? 'Carregando...' : 'Carregar mais'}
             disabled={preparedProps.loading}
             visible={preparedProps.hasNextPage}
