@@ -38,6 +38,7 @@ const Table = ({ config, actions, data, loading }) => {
       {checkboxes.component &&
         <td style={styles.td}>
           <checkboxes.component
+            checked={actions.isChecked(row)}
             onChange={event => {
               const { checked } = event.target;
               if (checked) {
