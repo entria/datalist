@@ -101,9 +101,8 @@ class DataContainer extends Component {
     this.props.checkboxes.onChange(checked);
   };
 
-  isChecked = item => {
-    return this.state.checked.filter(selectedItem => selectedItem.id === item.id).length > 0;
-  };
+  isChecked = item =>
+    this.state.checked.filter(selectedItem => selectedItem.id === item.id).length > 0;
 
   handleScroll = () => {
     const { loading } = this.state;

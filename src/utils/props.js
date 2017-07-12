@@ -1,8 +1,4 @@
 // @flow
-export const sanitizeVariables = (variables: Object): Object => {
-  return { first: 20, ...variables };
-};
+export const sanitizeVariables = (variables: Object): Object => ({ first: 20, ...variables });
 
-export const isLoading = (props: any): boolean => {
-  return props === null;
-};
+export const isLoading = (props: any): boolean => props === null;
