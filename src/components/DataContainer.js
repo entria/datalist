@@ -48,18 +48,17 @@ class DataContainer extends Component {
     }
   }
 
-  check(item) {
-    const checked = [...this.state.checked];
-    checked.push(item);
+  check = item => {
+    const checked = [...this.state.checked, item];
 
     this.setState({
       checked,
     });
 
     this.props.checkboxes.onChange(checked);
-  }
+  };
 
-  uncheck(item) {
+  uncheck = item => {
     const checked = this.state.checked.filter(selectedItem => selectedItem.id !== item.id);
 
     this.setState({
@@ -67,7 +66,7 @@ class DataContainer extends Component {
     });
 
     this.props.checkboxes.onChange(checked);
-  }
+  };
 
   prepareProps() {
     const { table, checkboxes } = this.props;

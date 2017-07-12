@@ -1,11 +1,6 @@
 // @flow
 export const sanitizeVariables = (variables: Object): Object => {
-  const sanitized = { ...variables };
-  if (!sanitized.first) {
-    sanitized.first = 20;
-  }
-
-  return sanitized;
+  return { first: 20, ...variables };
 };
 
 export const isLoading = (props: any): boolean => {
