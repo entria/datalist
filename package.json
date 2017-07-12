@@ -22,7 +22,7 @@
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
   "devDependencies": {
-    "@entria/relay-utils": "^0.0.4",
+    "@entria/relay-utils": "^0.0.6",
     "@kadira/storybook": "^2.35.3",
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
@@ -51,7 +51,7 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "@entria/relay-utils": "^0.0.4",
+    "@entria/relay-utils": "^0.0.6",
     "lodash": ">=4.17.4",
     "prop-types": ">=15.5.10",
     "react": ">=0.14",

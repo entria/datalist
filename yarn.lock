@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@entria/relay-utils@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@entria/relay-utils/-/relay-utils-0.0.4.tgz#cc0e53b861aacb48f6f635e83a5bbd4c68be1b80"
+"@entria/relay-utils@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@entria/relay-utils/-/relay-utils-0.0.6.tgz#b11c3190e606e235adc0f73fda9dea5c0252a908"
 
 "@kadira/react-split-pane@^1.4.0":
   version "1.4.7"
