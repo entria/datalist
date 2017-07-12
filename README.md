@@ -17,8 +17,8 @@ yarn add @entria/datalist
       users(first: $first) @connection(key: "DataList_users") {
         edges {
           node {
+            id
             name
-            email
             active
           }
         }
@@ -28,20 +28,22 @@ yarn add @entria/datalist
       }
     }
   `}
-  columns={[
-    {
-      label: 'Name',
-      property: 'name',
-    },
-    {
-      label: 'Email',
-      property: 'email',
-    },
-    {
-      label: 'Active',
-      render: (user) => user.active ? 'Yes' : 'No',
-    },
-  ]}
+  table={{
+    columns: [
+      {
+        label: 'Name',
+        property: 'name',
+      },
+      {
+        label: 'Active',
+        render: (user) => user.active ? 'Yes' : 'No',
+      },
+    ],
+  }}
+  checkboxes={{
+    component: (props) => <input type="checkbox" {...props} />,
+    onChange: (values) => console.log(values),
+  }}
 />
 ```
 
@@ -51,4 +53,5 @@ yarn add @entria/datalist
 - **query**: The Relay query
 - **fragments**: An object with the query fragments
 - **variables**: An object with the query default variables
-- **columns**: An array with the table columns
+- **table**: An object with table configs
+- **checkboxes**: An object with checkboxes configs
