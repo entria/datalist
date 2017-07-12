@@ -39,7 +39,7 @@ DataList.defaultProps = {
   },
   checkboxes: {
     component: null,
-    onCheck: null,
+    onChange: null,
     checked: [],
   },
 };
@@ -61,7 +61,7 @@ DataList.propTypes = {
   }),
   checkboxes: PropTypes.shape({
     component: PropTypes.any,
-    onCheck: PropTypes.func,
+    onChange: PropTypes.func,
     checked: PropTypes.array,
   }),
 };

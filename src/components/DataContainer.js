@@ -11,7 +11,7 @@ class DataContainer extends Component {
     loading: this.props.loading,
     variables: this.props.variables,
     count: this.props.variables.first,
-    checked: this.props.checkboxes.checked,
+    checked: this.props.checkboxes.checked || [],
   };
 
   componentWillReceiveProps(nextProps) {
@@ -48,6 +48,27 @@ class DataContainer extends Component {
     }
   }
 
+  check(item) {
+    const checked = [...this.state.checked];
+    checked.push(item);
+
+    this.setState({
+      checked,
+    });
+
+    this.props.checkboxes.onChange(checked);
+  }
+
+  uncheck(item) {
+    const checked = this.state.checked.filter(selectedItem => selectedItem.id !== item.id);
+
+    this.setState({
+      checked,
+    });
+
+    this.props.checkboxes.onChange(checked);
+  }
+
   prepareProps() {
     const { table, checkboxes } = this.props;
     const { loading } = this.state;
@@ -57,6 +78,10 @@ class DataContainer extends Component {
       config: {
         table,
         checkboxes,
+      },
+      actions: {
+        check: item => this.check(item),
+        uncheck: item => this.uncheck(item),
       },
       loading,
       data,
@@ -93,7 +118,7 @@ DataContainer.defaultProps = {
   },
   checkboxes: {
     component: null,
-    onCheck: null,
+    onChange: null,
     checked: [],
   },
 };
@@ -113,7 +138,7 @@ DataContainer.propTypes = {
   }),
   checkboxes: PropTypes.shape({
     component: PropTypes.any,
-    onCheck: PropTypes.func,
+    onChange: PropTypes.func,
     checked: PropTypes.array,
   }),
 };

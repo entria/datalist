@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
-const Table = ({ config, data, loading }) => {
+const Table = ({ config, actions, data, loading }) => {
   const { columns, cellRender } = config.table;
   const { checkboxes } = config;
 
@@ -32,9 +32,9 @@ const Table = ({ config, data, loading }) => {
             onChange={event => {
               const { checked } = event.target;
               if (checked) {
-                //actions.select(row);
+                actions.check(row);
               } else {
-                //actions.unselect(row);
+                actions.uncheck(row);
               }
             }}
           />
@@ -118,9 +118,13 @@ Table.propTypes = {
     }).isRequired,
     checkboxes: PropTypes.shape({
       component: PropTypes.any,
-      onCheck: PropTypes.func,
+      onChange: PropTypes.func,
       checked: PropTypes.array,
     }),
+  }).isRequired,
+  actions: PropTypes.shape({
+    check: PropTypes.func,
+    uncheck: PropTypes.func,
   }).isRequired,
   data: PropTypes.array,
   loading: PropTypes.bool,

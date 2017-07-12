@@ -158,7 +158,7 @@ stories.add('with checkboxes', () =>
     }}
     checkboxes={{
       component: (props) => <input type="checkbox" {...props} />,
-      onCheck: (values) => console.log(values),
+      onChange: (values) => alert(values.map(value => value.name).join(', ')),
     }}
   />,
 );
