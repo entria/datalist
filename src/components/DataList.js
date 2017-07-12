@@ -2,24 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { createRefetchContainer, QueryRenderer } from 'react-relay';
-import { identifyDataKey } from '../utils/relay';
 
+import { sanitizeVariables } from '../utils/props';
 import DataContainer from './DataContainer';
 
 const DataList = props => {
-  const variables = {
-    ...props.variables,
-  };
-  if (!variables.first) {
-    variables.first = 20;
-  }
+  const variables = sanitizeVariables(props.variables);
 
-  const DataListRefetchContainer = createRefetchContainer(
-    DataContainer,
-    props.fragments,
-    props.query,
-  );
+  const { fragments, query } = props;
+  const DataListRefetchContainer = createRefetchContainer(DataContainer, fragments, query);
 
+  const { table, checkboxes } = props;
   return (
     <QueryRenderer
       environment={props.environment}
@@ -27,11 +20,10 @@ const DataList = props => {
       variables={variables}
       render={({ props: rendererProps }) =>
         <DataListRefetchContainer
-          columns={props.columns}
           variables={variables}
-          cellRender={props.cellRender}
           loading={rendererProps === null}
-          dataKey={rendererProps ? identifyDataKey(rendererProps) : null}
+          table={table}
+          checkboxes={checkboxes}
           {...rendererProps}
         />}
     />
@@ -41,22 +33,37 @@ const DataList = props => {
 DataList.defaultProps = {
   fragments: {},
   variables: {},
-  cellRender: null,
+  table: {
+    columns: [],
+    cellRender: null,
+  },
+  checkboxes: {
+    component: null,
+    onChange: null,
+    checked: [],
+  },
 };
 
 DataList.propTypes = {
   environment: PropTypes.object.isRequired,
   query: PropTypes.func.isRequired,
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      property: PropTypes.string,
-      render: PropTypes.func,
-    }),
-  ).isRequired,
   fragments: PropTypes.object,
   variables: PropTypes.object,
-  cellRender: PropTypes.func,
+  table: PropTypes.shape({
+    columns: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        property: PropTypes.string,
+        render: PropTypes.func,
+      }),
+    ),
+    cellRender: PropTypes.func,
+  }),
+  checkboxes: PropTypes.shape({
+    component: PropTypes.any,
+    onChange: PropTypes.func,
+    checked: PropTypes.array,
+  }),
 };
 
 export default DataList;

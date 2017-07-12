@@ -1,9 +1,10 @@
+import React from 'react';
 import { configure } from '@kadira/storybook';
 
-const req = require.context('./stories', true, /\.story\.js$/);
-
 function loadStories() {
-  req.keys().forEach(filename => req(filename));
+  require('./stories/DataList.story');
+  require('./stories/Table.story');
+  require('./stories/Checkboxes.story');
 }
 
 configure(loadStories, module);

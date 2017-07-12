@@ -11,7 +11,7 @@ stories.add('default', () =>
   <DataList
     environment={Environment}
     query={graphql`
-      query DataListQuery($first: Int!) {
+      query DataListPeopleQuery($first: Int!) {
         allPeople(first: $first) @connection(key: "DataList_allPeople", filters: []) {
           edges {
             node {
@@ -26,15 +26,17 @@ stories.add('default', () =>
       }
     `}
     variables={{ first: 5 }}
-    columns={[
-      {
-        label: 'Name',
-        property: 'name',
-      },
-      {
-        label: 'Gender',
-        property: 'gender',
-      },
-    ]}
+    table={{
+      columns: [
+        {
+          label: 'Name',
+          property: 'name',
+        },
+        {
+          label: 'Gender',
+          property: 'gender',
+        },
+      ],
+    }}
   />,
 );

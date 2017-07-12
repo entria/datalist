@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import { hasNextPage, createDataArray } from '../utils/relay';
+import { hasNextPage, createDataArray } from '@entria/relay-utils';
 
 import InfiniteScroll from './InfiniteScroll';
 import Table from './Table';
@@ -12,6 +11,7 @@ class DataContainer extends Component {
     loading: this.props.loading,
     variables: this.props.variables,
     count: this.props.variables.first,
+    checked: this.props.checkboxes.checked || [],
   };
 
   componentWillReceiveProps(nextProps) {
@@ -20,8 +20,9 @@ class DataContainer extends Component {
     });
   }
 
-  loadMore() {
-    const { variables, count } = this.state;
+  fetchMore = (params = {}) => {
+    const count = params.count || this.state.count;
+    const { variables } = this.state;
 
     const options = {
       ...variables,
@@ -37,33 +38,117 @@ class DataContainer extends Component {
       this.setState({
         loading: false,
       });
-    });
-  }
 
-  handleScroll() {
-    const { dataKey } = this.props;
+      if (params.onComplete) {
+        params.onComplete();
+      }
+    });
+  };
+
+  fetchAll = (params = {}) => {
+    const count = params.count || 100;
+
+    if (!hasNextPage(this.props) && params.onComplete) {
+      const data = createDataArray(this.props);
+      return params.onComplete(data);
+    }
+
+    this.fetchMore({
+      count,
+      onComplete: () => this.fetchAll(params),
+    });
+  };
+
+  checkAll = () => {
+    this.fetchAll({
+      onComplete: data => {
+        this.setState({
+          checked: data,
+        });
+
+        this.props.checkboxes.onChange(data);
+      },
+    });
+  };
+
+  uncheckAll = () => {
+    const checked = [];
+
+    this.setState({
+      checked,
+    });
+
+    this.props.checkboxes.onChange(checked);
+  };
+
+  check = item => {
+    const checked = [...this.state.checked, item];
+
+    this.setState({
+      checked,
+    });
+
+    this.props.checkboxes.onChange(checked);
+  };
+
+  uncheck = item => {
+    const checked = this.state.checked.filter(selectedItem => selectedItem.id !== item.id);
+
+    this.setState({
+      checked,
+    });
+
+    this.props.checkboxes.onChange(checked);
+  };
+
+  isChecked = item => {
+    return this.state.checked.filter(selectedItem => selectedItem.id === item.id).length > 0;
+  };
+
+  handleScroll = () => {
     const { loading } = this.state;
 
-    if (hasNextPage(this.props, dataKey) && !loading) {
-      this.loadMore();
+    if (hasNextPage(this.props) && !loading) {
+      this.fetchMore();
     }
-  }
+  };
+
+  prepareProps = () => {
+    const { table, checkboxes } = this.props;
+    const { loading } = this.state;
+    const data = createDataArray(this.props);
+
+    return {
+      config: {
+        table,
+        checkboxes,
+      },
+      actions: {
+        checkAll: () => this.checkAll(),
+        uncheckAll: () => this.uncheckAll(),
+        check: item => this.check(item),
+        uncheck: item => this.uncheck(item),
+        isChecked: item => this.isChecked(item),
+      },
+      loading,
+      data,
+      hasNextPage: data.length > 0 && hasNextPage(this.props),
+    };
+  };
 
   render() {
-    const { columns, cellRender, dataKey } = this.props;
-    const { loading } = this.state;
-    const data = createDataArray(this.props, dataKey);
+    const preparedProps = this.prepareProps();
 
     return (
       <InfiniteScroll onScroll={() => this.handleScroll()}>
         <div>
-          <Table columns={columns} cellRender={cellRender} data={data} loading={loading} />
+          <Table {...preparedProps} />
 
           <LoadMore
-            onClick={() => this.loadMore()}
-            label={loading ? 'Carregando...' : 'Carregar mais'}
-            disabled={loading}
-            visible={data.length > 0 && hasNextPage(this.props, dataKey)}
+            onClick={() => this.fetchMore()}
+            label={preparedProps.loading ? 'Carregando...' : 'Carregar mais'}
+            disabled={preparedProps.loading}
+            visible={preparedProps.hasNextPage}
           />
         </div>
       </InfiniteScroll>
@@ -72,15 +157,37 @@ class DataContainer extends Component {
 }
 
 DataContainer.defaultProps = {
-  dataKey: null,
   loading: false,
   variables: {},
+  table: {
+    columns: [],
+    cellRender: null,
+  },
+  checkboxes: {
+    component: null,
+    onChange: null,
+    checked: [],
+  },
 };
 
 DataContainer.propTypes = {
-  dataKey: PropTypes.string,
   loading: PropTypes.bool,
   variables: PropTypes.object,
+  table: PropTypes.shape({
+    columns: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        property: PropTypes.string,
+        render: PropTypes.func,
+      }),
+    ),
+    cellRender: PropTypes.func,
+  }),
+  checkboxes: PropTypes.shape({
+    component: PropTypes.any,
+    onChange: PropTypes.func,
+    checked: PropTypes.array,
+  }),
 };
 
 export default DataContainer;

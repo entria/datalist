@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Lodash from 'lodash';
+import { get } from 'lodash';
 
-const Table = ({ columns, data, cellRender, loading }) => {
+const Table = ({ config, actions, data, loading }) => {
+  const { columns, cellRender } = config.table;
+  const { checkboxes } = config;
+
   const generateKey = (column, index) => {
     const property = column.property || 'noProperty';
     return property + index.toString();
@@ -11,6 +14,19 @@ const Table = ({ columns, data, cellRender, loading }) => {
   const renderHeader = () =>
     <thead>
       <tr>
+        {checkboxes.component &&
+          <th style={styles.th}>
+            <checkboxes.component
+              onChange={event => {
+                const { checked } = event.target;
+                if (checked) {
+                  actions.checkAll();
+                } else {
+                  actions.uncheckAll();
+                }
+              }}
+            />
+          </th>}
         {columns.map((column, index) =>
           <th key={generateKey(column, index)} style={styles.th}>{column.label}</th>,
         )}
@@ -19,12 +35,26 @@ const Table = ({ columns, data, cellRender, loading }) => {
 
   const renderRow = (row, rowIndex) =>
     <tr key={rowIndex}>
+      {checkboxes.component &&
+        <td style={styles.td}>
+          <checkboxes.component
+            checked={actions.isChecked(row)}
+            onChange={event => {
+              const { checked } = event.target;
+              if (checked) {
+                actions.check(row);
+              } else {
+                actions.uncheck(row);
+              }
+            }}
+          />
+        </td>}
       {columns.map((column, colIndex) => {
         let cell;
         if (column.render) {
           cell = column.render(row);
         } else {
-          const value = Lodash.get(row, column.property);
+          const value = get(row, column.property);
           cell = cellRender ? cellRender(value, row) : value;
         }
 
@@ -82,19 +112,33 @@ const styles = {
 Table.defaultProps = {
   data: [],
   loading: false,
-  cellRender: () => {},
 };
 
 Table.propTypes = {
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      property: PropTypes.string,
-      render: PropTypes.func,
+  config: PropTypes.shape({
+    table: PropTypes.shape({
+      columns: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          property: PropTypes.string,
+          render: PropTypes.func,
+        }),
+      ),
+      cellRender: PropTypes.func,
+    }).isRequired,
+    checkboxes: PropTypes.shape({
+      component: PropTypes.any,
+      onChange: PropTypes.func,
+      checked: PropTypes.array,
     }),
-  ).isRequired,
+  }).isRequired,
+  actions: PropTypes.shape({
+    checkAll: PropTypes.func,
+    uncheckAll: PropTypes.func,
+    check: PropTypes.func,
+    uncheck: PropTypes.func,
+  }).isRequired,
   data: PropTypes.array,
-  cellRender: PropTypes.func,
   loading: PropTypes.bool,
 };
 
