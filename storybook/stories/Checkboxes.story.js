@@ -5,18 +5,19 @@ import { graphql } from 'graphql';
 import DataList from '../../src';
 import Environment from '../relay/environment';
 
-const stories = storiesOf('DataList', module);
+const stories = storiesOf('Checkboxes', module);
 
 stories.add('default', () =>
   <DataList
     environment={Environment}
     query={graphql`
-      query DataListPeopleQuery($first: Int!) {
-        allPeople(first: $first) @connection(key: "DataList_allPeople", filters: []) {
+      query CheckboxesPlanetssQuery($first: Int!) {
+        allPlanets(first: $first) @connection(key: "Checkboxes_allPlanets", filters: []) {
           edges {
             node {
+              id
               name
-              gender
+              population
             }
           }
           pageInfo {
@@ -33,10 +34,14 @@ stories.add('default', () =>
           property: 'name',
         },
         {
-          label: 'Gender',
-          property: 'gender',
+          label: 'Population',
+          property: 'population',
         },
       ],
+    }}
+    checkboxes={{
+      component: (props) => <input type="checkbox" {...props} />,
+      onChange: (values) => alert(values.map(value => value.name).join(', ')),
     }}
   />,
 );
