@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
-import { connect } from 'react-redux';
-
-import { select, unselect } from '../ducks/Selected';
-
-const Table = ({ columns, cellRender, checkboxes, data, loading, actions, selected }) => {
-  console.log(selected);
+const Table = ({ config, data, loading }) => {
+  const { columns, cellRender } = config.table;
+  const { checkboxes } = config;
 
   const generateKey = (column, index) => {
     const property = column.property || 'noProperty';
@@ -17,7 +14,7 @@ const Table = ({ columns, cellRender, checkboxes, data, loading, actions, select
   const renderHeader = () =>
     <thead>
       <tr>
-        {checkboxes.store &&
+        {checkboxes.component &&
           <th style={styles.th}>
             <checkboxes.component />
           </th>}
@@ -29,15 +26,15 @@ const Table = ({ columns, cellRender, checkboxes, data, loading, actions, select
 
   const renderRow = (row, rowIndex) =>
     <tr key={rowIndex}>
-      {checkboxes.store &&
+      {checkboxes.component &&
         <td style={styles.td}>
           <checkboxes.component
             onChange={event => {
               const { checked } = event.target;
               if (checked) {
-                actions.select(row);
+                //actions.select(row);
               } else {
-                actions.unselect(row);
+                //actions.unselect(row);
               }
             }}
           />
@@ -103,38 +100,30 @@ const styles = {
 };
 
 Table.defaultProps = {
-  cellRender: null,
-  checkboxes: {},
   data: [],
   loading: false,
 };
 
 Table.propTypes = {
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      property: PropTypes.string,
-      render: PropTypes.func,
+  config: PropTypes.shape({
+    table: PropTypes.shape({
+      columns: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          property: PropTypes.string,
+          render: PropTypes.func,
+        }),
+      ),
+      cellRender: PropTypes.func,
+    }).isRequired,
+    checkboxes: PropTypes.shape({
+      component: PropTypes.any,
+      onCheck: PropTypes.func,
+      checked: PropTypes.array,
     }),
-  ).isRequired,
-  cellRender: PropTypes.func,
-  checkboxes: PropTypes.shape({
-    store: PropTypes.string.isRequired,
-    component: PropTypes.any.isRequired,
-  }),
+  }).isRequired,
   data: PropTypes.array,
   loading: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  selected: state.selected,
-});
-
-const mapDispatchToProps = (dispatch, props) => ({
-  actions: {
-    select: item => dispatch(select(item, props.checkboxes.store)),
-    unselect: item => dispatch(unselect(item, props.checkboxes.store)),
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Table);
+export default Table;

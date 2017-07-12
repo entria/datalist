@@ -3,22 +3,16 @@ import PropTypes from 'prop-types';
 
 import { createRefetchContainer, QueryRenderer } from 'react-relay';
 
+import { sanitizeVariables } from '../utils/props';
 import DataContainer from './DataContainer';
 
 const DataList = props => {
-  const variables = {
-    ...props.variables,
-  };
-  if (!variables.first) {
-    variables.first = 20;
-  }
+  const variables = sanitizeVariables(props.variables);
 
-  const DataListRefetchContainer = createRefetchContainer(
-    DataContainer,
-    props.fragments,
-    props.query,
-  );
+  const { fragments, query } = props;
+  const DataListRefetchContainer = createRefetchContainer(DataContainer, fragments, query);
 
+  const { table, checkboxes } = props;
   return (
     <QueryRenderer
       environment={props.environment}
@@ -28,7 +22,8 @@ const DataList = props => {
         <DataListRefetchContainer
           variables={variables}
           loading={rendererProps === null}
-          table={props.table}
+          table={table}
+          checkboxes={checkboxes}
           {...rendererProps}
         />}
     />
@@ -41,7 +36,11 @@ DataList.defaultProps = {
   table: {
     columns: [],
     cellRender: null,
-    checkboxes: {},
+  },
+  checkboxes: {
+    component: null,
+    onCheck: null,
+    checked: [],
   },
 };
 
@@ -57,12 +56,13 @@ DataList.propTypes = {
         property: PropTypes.string,
         render: PropTypes.func,
       }),
-    ).isRequired,
+    ),
     cellRender: PropTypes.func,
-    checkboxes: PropTypes.shape({
-      store: PropTypes.string.isRequired,
-      component: PropTypes.any.isRequired,
-    }),
+  }),
+  checkboxes: PropTypes.shape({
+    component: PropTypes.any,
+    onCheck: PropTypes.func,
+    checked: PropTypes.array,
   }),
 };
 

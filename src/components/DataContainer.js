@@ -11,6 +11,7 @@ class DataContainer extends Component {
     loading: this.props.loading,
     variables: this.props.variables,
     count: this.props.variables.first,
+    checked: this.props.checkboxes.checked,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -47,22 +48,35 @@ class DataContainer extends Component {
     }
   }
 
-  render() {
-    const { table } = this.props;
+  prepareProps() {
+    const { table, checkboxes } = this.props;
     const { loading } = this.state;
-
     const data = createDataArray(this.props);
+
+    return {
+      config: {
+        table,
+        checkboxes,
+      },
+      loading,
+      data,
+      hasNextPage: data.length > 0 && hasNextPage(this.props),
+    };
+  }
+
+  render() {
+    const preparedProps = this.prepareProps();
 
     return (
       <InfiniteScroll onScroll={() => this.handleScroll()}>
         <div>
-          <Table {...table} data={data} loading={loading} />
+          <Table {...preparedProps} />
 
           <LoadMore
             onClick={() => this.loadMore()}
-            label={loading ? 'Carregando...' : 'Carregar mais'}
-            disabled={loading}
-            visible={data.length > 0 && hasNextPage(this.props)}
+            label={preparedProps.loading ? 'Carregando...' : 'Carregar mais'}
+            disabled={preparedProps.loading}
+            visible={preparedProps.hasNextPage}
           />
         </div>
       </InfiniteScroll>
@@ -76,7 +90,11 @@ DataContainer.defaultProps = {
   table: {
     columns: [],
     cellRender: null,
-    checkboxes: {},
+  },
+  checkboxes: {
+    component: null,
+    onCheck: null,
+    checked: [],
   },
 };
 
@@ -90,12 +108,13 @@ DataContainer.propTypes = {
         property: PropTypes.string,
         render: PropTypes.func,
       }),
-    ).isRequired,
+    ),
     cellRender: PropTypes.func,
-    checkboxes: PropTypes.shape({
-      store: PropTypes.string.isRequired,
-      component: PropTypes.any.isRequired,
-    }),
+  }),
+  checkboxes: PropTypes.shape({
+    component: PropTypes.any,
+    onCheck: PropTypes.func,
+    checked: PropTypes.array,
   }),
 };
 

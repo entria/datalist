@@ -155,10 +155,10 @@ stories.add('with checkboxes', () =>
           property: 'population',
         },
       ],
-      checkboxes: {
-        store: 'planets',
-        component: (props) => <input type="checkbox" {...props} />
-      },
+    }}
+    checkboxes={{
+      component: (props) => <input type="checkbox" {...props} />,
+      onCheck: (values) => console.log(values),
     }}
   />,
 );
