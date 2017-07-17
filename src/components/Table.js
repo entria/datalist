@@ -20,8 +20,7 @@ const Table = ({ config, actions, data, loading, checked }) => {
               disabled={loading}
               checked={data.length > 0 && checked.length >= data.length}
               onChange={event => {
-                const { checked } = event.target;
-                if (checked) {
+                if (event.target.checked) {
                   actions.checkAll();
                 } else {
                   actions.uncheckAll();
@@ -42,8 +41,7 @@ const Table = ({ config, actions, data, loading, checked }) => {
           <checkboxes.component
             checked={actions.isChecked(row)}
             onChange={event => {
-              const { checked } = event.target;
-              if (checked) {
+              if (event.target.checked) {
                 actions.check(row);
               } else {
                 actions.uncheck(row);
