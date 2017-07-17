@@ -68,12 +68,17 @@ const Table = ({ config, actions, data, loading, checked }) => {
       })}
     </tr>;
 
-  const renderMessage = message =>
-    <tr>
-      <td colSpan={columns.length} style={styles.message}>
-        {message}
-      </td>
-    </tr>;
+  const renderMessage = message => {
+    const length = checkboxes.component ? columns.length + 1 : columns.length;
+
+    return (
+      <tr>
+        <td colSpan={length} style={styles.message}>
+          {message}
+        </td>
+      </tr>
+    );
+  };
 
   return (
     <table style={styles.wrapper}>
@@ -91,6 +96,8 @@ const Table = ({ config, actions, data, loading, checked }) => {
 const styles = {
   wrapper: {
     width: '100%',
+    maxWidth: '100%',
+    borderCollapse: 'collapse',
   },
   th: {
     padding: '10px 20px',
