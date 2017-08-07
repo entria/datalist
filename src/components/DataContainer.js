@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { hasNextPage, createDataArray } from '@entria/relay-utils';
+import { InfiniteScroll } from '@entria/utils';
 
-import InfiniteScroll from './InfiniteScroll';
 import Table from './Table';
 import LoadMore from './LoadMore';
 
