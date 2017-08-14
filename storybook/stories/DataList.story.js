@@ -9,6 +9,7 @@ const stories = storiesOf('DataList', module);
 
 stories.add('default', () =>
   <DataList
+    list="allPeople"
     environment={Environment}
     query={graphql`
       query DataListPeopleQuery($first: Int!) {

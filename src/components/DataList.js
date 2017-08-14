@@ -17,6 +17,7 @@ const DataList = props => {
     <QueryRenderer
       environment={props.environment}
       query={props.query}
+      list={props.list}
       variables={variables}
       render={({ props: rendererProps }) =>
         <DataListRefetchContainer
@@ -45,8 +46,9 @@ DataList.defaultProps = {
 };
 
 DataList.propTypes = {
-  environment: PropTypes.object.isRequired,
   query: PropTypes.func.isRequired,
+  environment: PropTypes.object.isRequired,
+  list: PropTypes.string.isRequired,
   fragments: PropTypes.object,
   variables: PropTypes.object,
   table: PropTypes.shape({

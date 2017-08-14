@@ -9,6 +9,7 @@ const stories = storiesOf('Table', module);
 
 stories.add('with column render()', () =>
   <DataList
+    list="allFilms"
     environment={Environment}
     query={graphql`
       query TableFilmsQuery($first: Int!) {
@@ -51,6 +52,7 @@ stories.add('with column render()', () =>
 
 stories.add('with cellRender()', () =>
   <DataList
+    list="allVehicles"
     environment={Environment}
     query={graphql`
       query TableVehiclesQuery($first: Int!) {

@@ -9,6 +9,7 @@ const stories = storiesOf('Checkboxes', module);
 
 stories.add('default', () =>
   <DataList
+    list="allPlanets"
     environment={Environment}
     query={graphql`
       query CheckboxesPlanetssQuery($first: Int!) {
@@ -49,6 +50,7 @@ stories.add('default', () =>
 
 stories.add('with checked default', () =>
   <DataList
+    list="allPlanets"
     environment={Environment}
     query={graphql`
       query CheckboxesPlanetssQuery($first: Int!) {
