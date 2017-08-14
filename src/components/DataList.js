@@ -18,14 +18,19 @@ const DataList = props => {
       environment={props.environment}
       query={props.query}
       variables={variables}
-      render={({ props: rendererProps }) =>
-        <DataListRefetchContainer
-          variables={variables}
-          loading={rendererProps === null}
-          table={table}
-          checkboxes={checkboxes}
-          {...rendererProps}
-        />}
+      render={({ props: rendererProps }) => {
+        if (rendererProps) {
+          return (
+            <DataListRefetchContainer
+              variables={variables}
+              loading={rendererProps === null}
+              table={table}
+              checkboxes={checkboxes}
+              {...rendererProps}
+            />
+          );
+        }
+      }}
     />
   );
 };
