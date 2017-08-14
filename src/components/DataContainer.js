@@ -121,9 +121,9 @@ class DataContainer extends Component {
   };
 
   prepareProps = () => {
-    const { table, checkboxes } = this.props;
+    const { table, checkboxes, list } = this.props;
     const { loading, checked } = this.state;
-    const data = createDataArray(this.props);
+    const data = createDataArray(this.props, list);
 
     return {
       config: {
@@ -179,6 +179,7 @@ DataContainer.defaultProps = {
 };
 
 DataContainer.propTypes = {
+  list: PropTypes.string.isRequired,
   loading: PropTypes.bool,
   variables: PropTypes.object,
   table: PropTypes.shape({
