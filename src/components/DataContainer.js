@@ -47,7 +47,8 @@ class DataContainer extends Component {
 
   fetchAll = (params = {}) => {
     const count = params.count || 100;
-    const data = createDataArray(this.props);
+    const { list } = this.props;
+    const data = createDataArray(this.props, list);
 
     if (params.onFetch) {
       params.onFetch(data);
