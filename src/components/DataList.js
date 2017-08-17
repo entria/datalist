@@ -12,12 +12,11 @@ const DataList = props => {
   const { fragments, query } = props;
   const DataListRefetchContainer = createRefetchContainer(DataContainer, fragments, query);
 
-  const { table, checkboxes } = props;
+  const { table, checkboxes, list } = props;
   return (
     <QueryRenderer
       environment={props.environment}
       query={props.query}
-      list={props.list}
       variables={variables}
       render={({ props: rendererProps }) => {
         if (rendererProps) {
@@ -27,10 +26,13 @@ const DataList = props => {
               loading={rendererProps === null}
               table={table}
               checkboxes={checkboxes}
+              list={list}
               {...rendererProps}
             />
           );
         }
+
+        return null;
       }}
     />
   );
